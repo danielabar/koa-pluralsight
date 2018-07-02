@@ -1,3 +1,24 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Introduction to Koa](#introduction-to-koa)
+  - [Intro](#intro)
+    - [First Applications](#first-applications)
+  - [Understanding Yield and Generators](#understanding-yield-and-generators)
+    - [Intro](#intro-1)
+    - [What Can I Use This For](#what-can-i-use-this-for)
+    - [Error Handling](#error-handling)
+  - [Koa Concepts](#koa-concepts)
+    - [The Application Object](#the-application-object)
+    - [The Request Object](#the-request-object)
+    - [The Response Object](#the-response-object)
+    - [The Context Object](#the-context-object)
+  - [Building an HTTP API With Koa](#building-an-http-api-with-koa)
+    - [The First Method - Create New Users](#the-first-method---create-new-users)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Introduction to Koa
 
 > My notes from this [Pluralsight course](https://app.pluralsight.com/library/courses/javascript-koa-introduction/table-of-contents)
@@ -376,3 +397,45 @@ ctx.bdoy = {foo: 'bar'};
 ```
 
 ## Building an HTTP API With Koa
+
+Will build simple CRUD HTTP API, this is Koa's sweet spot. Initial setup:
+
+```shell
+take UserApi
+npm init
+touch app.js
+touch test.js
+npm i --save koa
+```
+
+Add start script in `package.json`:
+
+```javascript
+"scripts": {
+  "start": "nodemon app.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+}
+```
+
+Then can start app with `npm start`.
+
+### The First Method - Create New Users
+
+Will use TDD approach, testing entire stack, using mocha and supertest. [test.js](UserApi/test.js).
+
+Testing is donen in-memory, no need to start server, since `app` object is exposed by `app.js`:
+
+```javascript
+// test.js
+const app = require('./app');
+const request = require('supertest').agent(app.listen());
+...
+```
+
+To run the tests:
+
+```shell
+./node_modules/mocha/bin/mocha -u bdd -R spec --exit
+```
+
+Left off at 4:06
