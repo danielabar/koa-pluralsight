@@ -20,6 +20,7 @@
     - [Get One](#get-one)
     - [Updating and Deleting](#updating-and-deleting)
     - [Refactoring](#refactoring)
+  - [Web site](#web-site)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -526,3 +527,12 @@ Move routes to separate file [userRoutes.js](UserApi/userRoutes.js) to clean up 
 Move db setup code to userRoutes.js.
 
 Also move all route handler functions to userRoutes.js
+
+## Web site
+
+Koa can serve static files using middleware:
+
+```javascript
+const serve = require('koa-static);
+app.use(serve(`${__dirname}/public`));
+```
