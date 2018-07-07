@@ -6,7 +6,7 @@
   - [Intro](#intro)
     - [First Applications](#first-applications)
   - [Understanding Yield and Generators](#understanding-yield-and-generators)
-    - [Intro](#intro-1)
+    - [Intro](#intro)
     - [What Can I Use This For](#what-can-i-use-this-for)
     - [Error Handling](#error-handling)
   - [Koa Concepts](#koa-concepts)
@@ -523,4 +523,6 @@ To test update, similar to get by id in that we first need to create a user in d
 
 Move routes to separate file [userRoutes.js](UserApi/userRoutes.js) to clean up app.js.
 
-Move db setup code to userRoutes.
+Move db setup code to userRoutes.js.
+
+Also move all route handler functions to userRoutes.js

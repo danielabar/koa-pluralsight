@@ -1,4 +1,5 @@
-const {app, users} = require('./app');
+const app = require('./app');
+const users = require('./userRoutes').users;
 const request = require('supertest').agent(app.listen());
 const expect = require('chai').expect;
 const _ = require('lodash');
