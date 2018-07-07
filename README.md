@@ -16,6 +16,10 @@
     - [The Context Object](#the-context-object)
   - [Building an HTTP API With Koa](#building-an-http-api-with-koa)
     - [The First Method - Create New Users](#the-first-method---create-new-users)
+    - [Validation](#validation)
+    - [Get One](#get-one)
+    - [Updating and Deleting](#updating-and-deleting)
+    - [Refactoring](#refactoring)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -423,14 +427,9 @@ Then can start app with `npm start`.
 
 Will use TDD approach, testing entire stack, using mocha and supertest. [test.js](UserApi/test.js).
 
-Testing is donen in-memory, no need to start server, since `app` object is exposed by `app.js`:
+Testing is done in-memory, no need to start server, since `app` object is exposed by `app.js`:
 
-```javascript
-// test.js
-const app = require('./app');
-const request = require('supertest').agent(app.listen());
-...
-```
+See [test.js](UserApi/test.js)
 
 To run the tests:
 
@@ -438,4 +437,90 @@ To run the tests:
 ./node_modules/mocha/bin/mocha -u bdd -R spec --exit
 ```
 
-Left off at 4:06
+Can also move above command to `scripts` section of `package.json`, then run `npm test`.
+
+Then write code to make test pass, see [app.js](UserApi/app.js).
+
+Will use [Monk](https://automattic.github.io/monk/) as Mongo wrapper.
+
+### Validation
+
+API should have some validation and reject invalid inputs. To send an error response code:
+
+```javascript
+ctx.throw(400, 'error message');
+```
+
+For example:
+
+```javascript
+app.use(routes.post('/user', addUser))
+
+async function addUser(ctx) {
+  const userFromRequest = await parse(ctx);
+
+  if (!userFromRequest.name) {
+    ctx.throw(400, 'name required');
+  }
+  try {
+    const insertedUser = await users.insert(userFromRequest);
+    ctx.body = insertedUser;
+    ctx.set('Location', `/user/${insertedUser._id}`);
+    ctx.status = 201;
+  } catch (err) {
+    console.error(err);
+    ctx.throw(500, 'unable to save user');
+  }
+}
+```
+
+### Get One
+
+To verify a particular user by id exists, will first have to create it in the test. Can do this by exporting the `users` collection from app so it's available to test to do inserts.
+
+```javascript
+// app.js
+const users = db.get('users');
+module.exports.users = users;
+
+// test.js
+const a_user = {...};
+const insertedUser = await app.users.insert(a_user);
+```
+
+If a route has a parameter such as `id` in this case:
+
+```javascript
+app.use(routes.get('/user/:id', getUser));
+```
+
+Then the parameter will be sent to the route handler, `getUser` in this case:
+
+```javascript
+async function getUser(ctx, id) {
+  const user = await users.findOne({_id: id});
+  if (!user) {
+    ctx.throw(404, `no such user with id ${id}`);
+  }
+  ctx.body = user;
+  ctx.status = 200;
+}
+```
+
+A problem with tests so far is they have side effects - inserting users in database. This should be cleaned up:
+
+```javascript
+afterEach(async () => {
+  await users.remove();
+});
+```
+
+### Updating and Deleting
+
+To test update, similar to get by id in that we first need to create a user in database.
+
+### Refactoring
+
+Move routes to separate file [userRoutes.js](UserApi/userRoutes.js) to clean up app.js.
+
+Move db setup code to userRoutes.
