@@ -232,7 +232,7 @@ Context object is encapsulation of Request and Response.
 To create Application object:
 
 ```javascript
-const Koa = require('koa);
+const Koa = require('koa');
 const app = new Koa();
 // for testing purposes, also expose app object to other modules:
 module.exports = Koa;
@@ -243,7 +243,7 @@ One liner: `const app = module.exports = require('koa)();`
 `listen` function starts up app listening on given port number:
 
 ```javascript
-const app = require('koa)();
+const app = require('koa')();
 app.listen(3000);
 console.log('The app is running. And listening on port 3000');
 ```
