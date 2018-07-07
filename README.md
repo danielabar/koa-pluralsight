@@ -270,7 +270,7 @@ app.use(ctx => {
   ctx.body = 'Hello World';
 });
 app.listen(3000);
-console.log('The app is running on port 3000);
+console.log('The app is running on port 3000');
 ```
 
 Can also write a custom logger that logs before and after request by running code before and after await, using `next` argument provided by Koa:
@@ -327,7 +327,7 @@ Useful functions of request object include:
 Use `accepts` function to do content negotation, eg if your api accepts and handles different content types:
 
 ```javascript
-switch (this.request.accepts('json', 'html', 'text)) {
+switch (this.request.accepts('json', 'html', 'text')) {
   case 'json': break;
   case 'html': break;
   case 'text': break;
@@ -533,6 +533,6 @@ Also move all route handler functions to userRoutes.js
 Koa can serve static files using middleware:
 
 ```javascript
-const serve = require('koa-static);
+const serve = require('koa-static');
 app.use(serve(`${__dirname}/public`));
 ```
